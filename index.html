@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hydration Overlay</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0); /* Fully transparent */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Character Container */
+        #character-container {
+            position: absolute;
+            bottom: -300px;
+            right: 0;
+            width: 300px;
+            cursor: pointer;
+            transition: bottom 0.5s ease;
+        }
+
+        #character-container.show {
+            bottom: 0;
+        }
+
+        #character-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* Anime Goth Girl Image */
+        #goth-girl {
+            width: 100%;
+            display: block;
+        }
+
+        /* Custom Banner Notification (Left Side) */
+        #banner {
+            position: absolute;
+            left: -400px;
+            top: 20%;
+            width: 300px;
+            background: rgba(20, 20, 20, 0.9);
+            color: #ff79c6; /* Gothic Pink */
+            border-left: 5px solid #bd93f9;
+            padding: 20px;
+            transition: left 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+        }
+
+        #banner.show {
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="banner">
+        <h3 style="margin-top:0;">Thirsty?</h3>
+        <p>Daddy don't make me wait... drink some water for me, okay?</p>
+    </div>
+
+    <div id="character-container" onclick="remindMe()">
+        <img id="goth-girl" src="goth_girl_idle.png" alt="Goth Girl">
+    </div>
+
+    <script>
+        // Array of audio file paths
+        const voiceLines = [
+            'audio/flirty1.mp3',
+            'audio/flirty2.mp3',
+            'audio/flirty3.mp3'
+        ];
+
+        function remindMe() {
+            // Show Banner
+            const banner = document.getElementById('banner');
+            banner.classList.add('show');
+
+            // Show Character
+            const character = document.getElementById('character-container');
+            character.classList.add('show');
+
+            // Play Random Voice Line
+            const randomLine = voiceLines[Math.floor(Math.random() * voiceLines.length)];
+            const audio = new Audio(randomLine);
+            audio.volume = 0.1;
+            audio.play();
+
+            // Hide Banner and Character after 10 seconds
+            setTimeout(() => {
+                banner.classList.remove('show');
+                character.classList.remove('show');
+            }, 10000);
+        }
+
+        // Set interval for every 1 hour (3600000 milliseconds)
+        setInterval(remindMe, 3600000);
+
+        // Request browser notification permission on load
+        if (Notification.permission !== "granted") {
+            Notification.requestPermission();
+        }
+    </script>
+</body>
+</html>
